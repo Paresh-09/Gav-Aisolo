@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 interface ApiResponse {
     success: boolean;
-    data: any;
     spreadsheetUrl?: string;
     error?: string;
 }
@@ -18,23 +17,8 @@ export default function Home() {
         setLoading(true);
         setError(null);
         try {
-            // Fetch the CSV data from /api/test1 (or your CSV source)
-            const response = await fetch('/api/csv');
-            const csvData = await response.text();
-
-            console.log(csvData);
-            if (!response.ok) {
-                throw new Error('Failed to fetch CSV data');
-            }
-
             // Call the server-side API to generate the Google Sheet
-            const createSheetResponse = await fetch('/api/create-sheet', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ csvData })
-            });
+            const createSheetResponse = await fetch('/api/data');
 
             const result = await createSheetResponse.json();
 
@@ -45,7 +29,6 @@ export default function Home() {
             setData({
                 success: true,
                 spreadsheetUrl: result.spreadsheetUrl,
-                data: result.data,
             });
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unexpected error occurred');
@@ -58,7 +41,7 @@ export default function Home() {
         <main className="min-h-screen p-8 bg-gray-50">
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-3xl font-bold mb-8 text-gray-800">
-                    Jokes to Google Sheets
+                    Google Sheets
                 </h1>
 
                 {/* Action Button */}

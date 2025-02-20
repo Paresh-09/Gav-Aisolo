@@ -82,3 +82,31 @@ export async function createSpreadSheet<T>(title: string, data: T[]) {
     }
 }
 
+// Function to update an existing Google Spreadsheet
+export async function updateSpreadSheet(spreadsheetId: string, data: any[]) {
+    try {
+        const auth = await getGoogleSheetAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        // Format data for Google Sheets
+        const headers = getAllKeys(data[0]);
+        const rows = data.map(item => headers.map(header => {
+            const value = getNestedValue(item, header);
+            return value === null || value === undefined ? '' : value.toString();
+        }));
+
+        // Write the data to the sheet
+        await sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: 'A1', // Start from the first cell
+            valueInputOption: 'RAW',
+            requestBody: {
+                values: [headers, ...rows] // First row is headers, then data
+            }
+        });
+    } catch (error) {
+        console.error('Error updating spreadsheet:', error);
+        throw error;
+    }
+}
+
