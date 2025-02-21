@@ -22,7 +22,7 @@ seo book keyword suggestion tool free download;1;1;0;70;0.00;http://tools.seoboo
     // Parse the temporary CSV data into an array of objects
     const parsedData = parseCSV(mockData);
 
-    console.log(parsedData);
+
 
     let spreadsheetId;
 
@@ -38,7 +38,7 @@ seo book keyword suggestion tool free download;1;1;0;70;0.00;http://tools.seoboo
     // Construct the URL to access the spreadsheet
     const spreadsheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
 
-    // Return the spreadsheet URL as a response
+    
     return new Response(JSON.stringify({ spreadsheetUrl }), {
       headers: {
         "Content-Type": "application/json",
